@@ -60,7 +60,7 @@ public class Inventory {
 	}
 
 	/**
-	 * @return an {@Link ArrayList} of all the categories in the inventory
+	 * @return an {@link ArrayList} of all the categories in the inventory
 	 */
 	public ArrayList<Category> getCategories() {
 		return categories;

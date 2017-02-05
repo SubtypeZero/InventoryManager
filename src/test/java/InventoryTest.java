@@ -57,7 +57,7 @@ public class InventoryTest {
 		assertEquals(true, coffee.removeItem(starbucks));
 		assertEquals(false, coffee.itemExists(starbucks));
 
-		// add category
+		// Add and remove categories
 		Inventory store = new Inventory("Save-A-Bunch");
 		assertEquals(false, store.categoryExists(appliances));
 		assertEquals(true, store.addCategory(appliances));

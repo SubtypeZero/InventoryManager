@@ -155,7 +155,7 @@ public class Category {
 	}
 
 	/**
-	 * @return a {@Link HashMap} of all stock in the category
+	 * @return a {@link HashMap} of all stock in the category
 	 */
 	public HashMap<Item, Integer> getStock() {
 		return stock;
