@@ -13,7 +13,7 @@ public class Item {
 	public Item(String name, String desc, double price) {
 		this.name = name;
 		this.desc = desc;
-		this.price = price;
+		setPrice(price);
 	}
 
 	/**
@@ -54,10 +54,13 @@ public class Item {
 	}
 
 	/**
-	 * Set the price of an item
+	 * Set the price of an item, must be greater than zero.
 	 * @param price the price
 	 */
 	public void setPrice(double price) {
+		if (price < 0) {
+			return;
+		}
 		this.price = price;
 	}
 }

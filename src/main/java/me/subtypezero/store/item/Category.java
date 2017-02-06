@@ -189,7 +189,7 @@ public class Category {
 	 * Set the title of the category.
 	 * @param title the title to set
 	 */
-	public void setName(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 }
