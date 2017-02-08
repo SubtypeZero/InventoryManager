@@ -3,46 +3,50 @@ package me.subtypezero.store.item;
 import java.util.HashMap;
 
 public class Category {
-	private HashMap<Item, Integer> stock;
-	private String title;
+	private HashMap<Item, Integer> items;
+	private final String name;
 
 	/**
-	 * @param title the category title
+	 * @param name the category name
 	 */
-	public Category(String title) {
-		this(title, new HashMap<Item, Integer>());
+	public Category(String name) {
+		this(name, new HashMap<Item, Integer>());
 	}
 
 	/**
-	 * @param title the category title
-	 * @param stock the stock to place in the category
+	 * @param name the category name
+	 * @param items the items to place in the category
 	 */
-	public Category(String title, HashMap<Item, Integer> stock) {
-		this.stock = stock;
-		this.title = title;
+	public Category(String name, HashMap<Item, Integer> items) {
+		this.items = items;
+		this.name = name;
 	}
 
 	/**
-	 * Add a new item to the category.
+	 * Add a new item to the category, the item amount will be set to zero.
 	 * @param item the item to add
 	 * @return
 	 */
 	public boolean addItem(Item item) {
-		return addItem(item, 1);
+		return addItem(item, 0);
 	}
 
 	/**
-	 * Add a new item to the category.
+	 * Add an item to the category.
 	 * @param item the item to add
 	 * @param count the amount to add
 	 * @return the status of the operation, false if there was a problem
 	 */
 	public boolean addItem(Item item, int count) {
+		if (count < 0) {
+			logError("add item", "count cannot be negative");
+			return false;
+		}
 		if (itemExists(item)) {
 			logError("add item", "the item already exists");
 			return false;
 		}
-		stock.put(item, count);
+		items.put(item, count);
 		return true;
 	}
 
@@ -53,7 +57,7 @@ public class Category {
 	 */
 	public boolean removeItem(Item item) {
 		if (itemExists(item)) {
-			stock.remove(item);
+			items.remove(item);
 			return true;
 		}
 		logError("remove item", "the item does not exist");
@@ -66,107 +70,107 @@ public class Category {
 	 * @return true if the item exists
 	 */
 	public boolean itemExists(Item item) {
-		return stock.containsKey(item);
+		return items.containsKey(item);
 	}
 
 	/**
-	 * Add one more of an item to stock.
+	 * Increase the count of an item in the category by one.
 	 * @param item the item to add
 	 * @return the status of the operation, false if there was a problem
 	 */
-	public boolean increaseStock(Item item) {
-		return increaseStock(item, 1);
+	public boolean increaseCount(Item item) {
+		return increaseCount(item, 1);
 	}
 
 	/**
-	 * Add more of an item to stock.
+	 * Increase the count of an item in the category.
 	 * @param item the item to add
-	 * @param count the number to add
+	 * @param amount the number to items to add
 	 * @return the status of the operation, false if there was a problem
 	 */
-	public boolean increaseStock(Item item, int count) {
+	public boolean increaseCount(Item item, int amount) {
 		if (itemExists(item)) {
-			stock.put(item, stock.get(item) + count);
+			items.put(item, items.get(item) + amount);
 			return true;
 		}
-		logError("increase item", "the item does not exist");
+		logError("increase count", "the item does not exist");
 		return false;
 	}
 
 	/**
-	 * Remove one item from stock.
+	 * Decrease the count of an item in the category by one.
 	 * @param item the item to remove
 	 * @return the status of the operation, false if there was a problem
 	 */
-	public boolean decreaseStock(Item item) {
-		return decreaseStock(item, 1);
+	public boolean decreaseCount(Item item) {
+		return decreaseCount(item, 1);
 	}
 
 	/**
-	 * Remove items from stock.
+	 * Decrease the count of an item in the category.
 	 * @param item the item to remove
-	 * @param count the number of items to remove
+	 * @param amount the number of items to remove
 	 * @return the status of the operation, false if there was a problem
 	 */
-	public boolean decreaseStock(Item item, int count) {
+	public boolean decreaseCount(Item item, int amount) {
 		if (itemExists(item)) {
-			int stock = this.stock.get(item);
+			int stock = this.items.get(item);
 
-			if (stock - count >= 0) {
-				this.stock.put(item, stock - count);
+			if (stock - amount >= 0) {
+				this.items.put(item, stock - amount);
 				return true;
 			}
-			logError("decrease item", "not enough in stock");
+			logError("decrease count", "not enough items in stock");
 			return false;
 		}
-		logError("decrease item", "the item does not exist");
+		logError("decrease count", "the item does not exist");
 		return false;
 	}
 
 	/**
-	 * Check how many of an item are in stock.
+	 * Get the count of how many items are in the category.
 	 * @param item the item to check
-	 * @return the number of items in stock, -1 if the item does not exist
+	 * @return the number of items, -1 if the item does not exist
 	 */
-	public int getStock(Item item) {
+	public int getCount(Item item) {
 		if (itemExists(item)) {
-			return stock.get(item);
+			return items.get(item);
 		}
 		return -1;
 	}
 
 	/**
-	 * Set the amount of items in stock.
+	 * Set the count of an item in the category.
 	 * @param item the item to set
 	 * @param count the number of items
 	 * @return the status of the operation, false if there was a problem
 	 */
-	public boolean setStock(Item item,  int count) {
+	public boolean setCount(Item item, int count) {
 		if (itemExists(item)) {
 			if (count < 0) {
-				logError("set stock", "stock cannot be negative");
+				logError("set count", "count cannot be negative");
 				return false;
 			}
-			stock.put(item, count);
+			items.put(item, count);
 			return true;
 		}
-		logError("set stock", "the item does not exist");
+		logError("set count", "the item does not exist");
 		return false;
 	}
 
 	/**
-	 * @return a {@link HashMap} of all stock in the category
+	 * @return a {@link HashMap} of all items in the category
 	 */
-	public HashMap<Item, Integer> getStock() {
-		return stock;
+	public HashMap<Item, Integer> getItems() {
+		return items;
 	}
 
 	/**
-	 * Set the category stock.
-	 * @param stock the stock to set
+	 * Set the {@link HashMap} of items the category.
+	 * @param items the items to set
 	 */
-	public void setStock(HashMap<Item, Integer> stock) {
-		this.stock = stock;
+	public void setItems(HashMap<Item, Integer> items) {
+		this.items = items;
 	}
 
 	/**
@@ -175,21 +179,13 @@ public class Category {
 	 * @param reason the reason the action failed
 	 */
 	private void logError(String action, String reason) {
-		System.out.println(String.format("[ERROR] %s tried to %s and failed, %s.", this.getTitle(), action, reason));
+		System.out.println(String.format("[ERROR] %s tried to %s and failed, %s.", this.getName(), action, reason));
 	}
 
 	/**
-	 * @return the title of the category
+	 * @return the name of the category
 	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Set the title of the category.
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
+	public String getName() {
+		return name;
 	}
 }

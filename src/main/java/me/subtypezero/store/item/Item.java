@@ -1,7 +1,7 @@
 package me.subtypezero.store.item;
 
 public class Item {
-	private String name;
+	private final String name;
 	private String desc;
 	private double price;
 
@@ -21,14 +21,6 @@ public class Item {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Set the name of the item.
-	 * @param name the name of the item
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -58,7 +50,7 @@ public class Item {
 	 * @param price the price
 	 */
 	public void setPrice(double price) {
-		if (price < 0) {
+		if (price < 0 || price > 9999999.99) {
 			return;
 		}
 		this.price = price;

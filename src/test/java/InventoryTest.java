@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class InventoryTest {
 
@@ -16,12 +16,11 @@ public class InventoryTest {
 		Item ninjaBar = new Item("NINJA-CB", "Ninja Coffee Bar XL", 159.99);
 		Item kitchenAid = new Item("KSM150PSER", "KitchenAid Mixer", 309.99);
 
-		Item folgers = new Item("FGRS-CR", "Folgers Classic Roast", 5.93);
+		Item folgers = new Item("FLGRS-CR", "Folgers Classic Roast", 5.93);
 		Item deathWish = new Item("DWGC-CO16", "Death Wish Ground Coffee", 18.99);
 		Item starbucks = new Item("SB-FR40", "Starbucks French Roast", 24.45);
 
 		// Verify that the Item class is working properly
-		folgers.setName("FLGRS-CR");
 		assertEquals("FLGRS-CR", folgers.getName());
 		toaster.setDesc("Hamilton Beach Toaster");
 		assertEquals("Hamilton Beach Toaster", toaster.getDesc());
@@ -29,39 +28,38 @@ public class InventoryTest {
 		assertEquals(24.45, starbucks.getPrice(), 0);
 
 
-		Category appliances = new Category("Stuff");
-		appliances.setTitle("Appliances");
-		assertEquals("Appliances", appliances.getTitle());
+		Category appliances = new Category("Appliances");
+		assertEquals("Appliances", appliances.getName());
 
-		HashMap<Item, Integer> stock = new HashMap<>();
-		stock.put(kitchenAid, 1);
-		appliances.setStock(stock);
+		HashMap<Item, Integer> items = new HashMap<>();
+		items.put(kitchenAid, 1);
+		appliances.setItems(items);
 
-		HashMap<Item, Integer> stock1 = appliances.getStock();
+		HashMap<Item, Integer> stock1 = appliances.getItems();
 		assertEquals(1, stock1.get(kitchenAid), 0);
-		appliances.setStock(new HashMap<Item, Integer>());
+		appliances.setItems(new HashMap<Item, Integer>());
 
 		assertEquals(true, appliances.addItem(toaster));
 		assertEquals(true, appliances.addItem(ninjaBar, 5));
 		assertEquals(false, appliances.addItem(ninjaBar, 20));
-		assertEquals(5, appliances.getStock(ninjaBar));
+		assertEquals(5, appliances.getCount(ninjaBar));
 
-		assertEquals(-1, appliances.getStock(kitchenAid));
-		assertEquals(false, appliances.decreaseStock(kitchenAid));
+		assertEquals(-1, appliances.getCount(kitchenAid));
+		assertEquals(false, appliances.decreaseCount(kitchenAid));
 
-		assertEquals(false, appliances.setStock(kitchenAid, 5));
+		assertEquals(false, appliances.setCount(kitchenAid, 5));
 
 		// Pretend that all of the ninja coffee bars have just been sold
-		assertEquals(true, appliances.decreaseStock(ninjaBar, 5));
+		assertEquals(true, appliances.decreaseCount(ninjaBar, 5));
 
 		// Verify that the Category class is working properly
-		appliances.increaseStock(toaster, 10);
-		assertEquals(11, appliances.getStock(toaster));
-		assertEquals(false, appliances.increaseStock(kitchenAid));
+		appliances.increaseCount(toaster, 10);
+		assertEquals(10, appliances.getCount(toaster));
+		assertEquals(false, appliances.increaseCount(kitchenAid));
 
-		assertEquals(false, appliances.decreaseStock(ninjaBar)); // This should cause an error to be logged
-		assertEquals(true, appliances.increaseStock(ninjaBar));
-		assertEquals(1, appliances.getStock(ninjaBar));
+		assertEquals(false, appliances.decreaseCount(ninjaBar)); // This should cause an error to be logged
+		assertEquals(true, appliances.increaseCount(ninjaBar));
+		assertEquals(1, appliances.getCount(ninjaBar));
 
 
 		Category coffee = new Category("Coffee");
@@ -70,9 +68,9 @@ public class InventoryTest {
 		coffee.addItem(starbucks, 15);
 
 		// Pretend a shipment of folgers coffee just arrived
-		assertEquals(false, coffee.setStock(deathWish, -5));
-		assertEquals(6, coffee.getStock(deathWish));
-		assertEquals(true, coffee.setStock(folgers, 30));
+		assertEquals(false, coffee.setCount(deathWish, -5));
+		assertEquals(6, coffee.getCount(deathWish));
+		assertEquals(true, coffee.setCount(folgers, 30));
 
 		// Remove an item from the store
 		assertEquals(true, coffee.removeItem(starbucks));
@@ -80,8 +78,7 @@ public class InventoryTest {
 		assertEquals(false, coffee.itemExists(starbucks));
 
 		// Add and remove categories
-		Inventory store = new Inventory("Save-A-Bunch");
-		store.setTitle("Save-A-Lot");
+		Inventory store = new Inventory("Save-A-Lot");
 		assertEquals("Save-A-Lot", store.getTitle());
 
 		ArrayList<Category> categories = new ArrayList<>();

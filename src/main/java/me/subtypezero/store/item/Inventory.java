@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Inventory {
 	private ArrayList<Category> categories;
-	private String title;
+	private final String title;
 
 	/**
 	 * @param title
@@ -51,6 +51,21 @@ public class Inventory {
 	}
 
 	/**
+	 * Get a category by name from the inventory.
+	 *
+	 * @param name the name of the category to search for
+	 * @return the category, null if the category was not found
+	 */
+	public Category getCategory(String name) {
+		for (Category category : categories) {
+			if (category.getName().equals(name)) {
+				return category;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Check if a category exists in the inventory.
 	 * @param category the category to check
 	 * @return true if the item exists
@@ -88,13 +103,5 @@ public class Inventory {
 	 */
 	public String getTitle() {
 		return title;
-	}
-
-	/**
-	 * Set the title of the inventory.
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
 	}
 }
