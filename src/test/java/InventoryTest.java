@@ -1,7 +1,6 @@
 import me.subtypezero.store.item.Category;
 import me.subtypezero.store.item.Inventory;
 import me.subtypezero.store.item.Item;
-import me.subtypezero.store.util.Logger;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -106,8 +105,5 @@ public class InventoryTest {
 
 		assertNull(store.getCategory("Clothing"));
 		assertEquals(coffee, store.getCategory("Coffee"));
-
-		Logger logger = new Logger();
-		logger.logError("Test", "do something", "this is a test");
 	}
 }
