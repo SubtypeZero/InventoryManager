@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class InventoryTest {
 
@@ -24,7 +25,8 @@ public class InventoryTest {
 		assertEquals("FLGRS-CR", folgers.getName());
 		toaster.setDesc("Hamilton Beach Toaster");
 		assertEquals("Hamilton Beach Toaster", toaster.getDesc());
-		starbucks.setPrice(-1.0);
+		assertEquals(false, starbucks.setPrice(-1.0));
+		assertEquals(false, starbucks.setPrice(10000000.00));
 		assertEquals(24.45, starbucks.getPrice(), 0);
 
 
@@ -39,6 +41,7 @@ public class InventoryTest {
 		assertEquals(1, stock1.get(kitchenAid), 0);
 		appliances.setItems(new HashMap<Item, Integer>());
 
+		assertEquals(false, appliances.addItem(toaster, -10));
 		assertEquals(true, appliances.addItem(toaster));
 		assertEquals(true, appliances.addItem(ninjaBar, 5));
 		assertEquals(false, appliances.addItem(ninjaBar, 20));
@@ -79,7 +82,7 @@ public class InventoryTest {
 
 		// Add and remove categories
 		Inventory store = new Inventory("Save-A-Lot");
-		assertEquals("Save-A-Lot", store.getTitle());
+		assertEquals("Save-A-Lot", store.getName());
 
 		ArrayList<Category> categories = new ArrayList<>();
 		categories.add(coffee);
@@ -99,5 +102,8 @@ public class InventoryTest {
 		assertEquals(false, store.removeCategory(coffee));
 		assertEquals(true, store.addCategory(coffee));
 		assertEquals(true, store.categoryExists(coffee));
+
+		assertNull(store.getCategory("Clothing"));
+		assertEquals(coffee, store.getCategory("Coffee"));
 	}
 }

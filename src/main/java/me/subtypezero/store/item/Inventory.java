@@ -1,24 +1,26 @@
 package me.subtypezero.store.item;
 
+import me.subtypezero.store.util.Logger;
+
 import java.util.ArrayList;
 
 public class Inventory {
 	private ArrayList<Category> categories;
-	private final String title;
+	private final String name;
 
 	/**
-	 * @param title
+	 * @param name
 	 */
-	public Inventory(String title) {
-		this(title, new ArrayList<Category>());
+	public Inventory(String name) {
+		this(name, new ArrayList<Category>());
 	}
 
 	/**
-	 * @param title
+	 * @param name
 	 * @param categories
 	 */
-	public Inventory(String title, ArrayList<Category> categories) {
-		this.title = title;
+	public Inventory(String name, ArrayList<Category> categories) {
+		this.name = name;
 		this.categories = categories;
 	}
 
@@ -29,7 +31,7 @@ public class Inventory {
 	 */
 	public boolean addCategory(Category category) {
 		if (categoryExists(category)) {
-			logError("add category", "the category already exists");
+			Logger.logError(this.getName(), "add category", "the category already exists");
 			return false;
 		}
 		categories.add(category);
@@ -46,7 +48,7 @@ public class Inventory {
 			categories.remove(category);
 			return true;
 		}
-		logError("remove category", "the category does not exist");
+		Logger.logError(this.getName(), "remove category", "the category does not exist");
 		return false;
 	}
 
@@ -90,18 +92,9 @@ public class Inventory {
 	}
 
 	/**
-	 * Log an error in a pre-determined format.
-	 * @param action the action that was attempted
-	 * @param reason the reason the action failed
+	 * @return the name of the inventory
 	 */
-	private void logError(String action, String reason) {
-		System.out.println(String.format("[ERROR] %s tried to %s and failed, %s.", this.getTitle(), action, reason));
-	}
-
-	/**
-	 * @return the title of the inventory
-	 */
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 }

@@ -1,5 +1,7 @@
 package me.subtypezero.store.item;
 
+import me.subtypezero.store.util.Logger;
+
 public class Item {
 	private final String name;
 	private String desc;
@@ -46,13 +48,16 @@ public class Item {
 	}
 
 	/**
-	 * Set the price of an item, must be greater than zero.
-	 * @param price the price
+	 * Set the price of an item, must be greater than zero and less than 10 million.
+	 * @param price the price of the item
+	 * @return
 	 */
-	public void setPrice(double price) {
+	public boolean setPrice(double price) {
 		if (price < 0 || price > 9999999.99) {
-			return;
+			Logger.logError(this.getName(), "set price", "the price is out of bounds");
+			return false;
 		}
 		this.price = price;
+		return true;
 	}
 }

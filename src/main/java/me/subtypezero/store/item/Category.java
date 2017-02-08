@@ -1,5 +1,7 @@
 package me.subtypezero.store.item;
 
+import me.subtypezero.store.util.Logger;
+
 import java.util.HashMap;
 
 public class Category {
@@ -39,11 +41,11 @@ public class Category {
 	 */
 	public boolean addItem(Item item, int count) {
 		if (count < 0) {
-			logError("add item", "count cannot be negative");
+			Logger.logError(this.getName(), "add item", "count cannot be negative");
 			return false;
 		}
 		if (itemExists(item)) {
-			logError("add item", "the item already exists");
+			Logger.logError(this.getName(), "add item", "the item already exists");
 			return false;
 		}
 		items.put(item, count);
@@ -60,7 +62,7 @@ public class Category {
 			items.remove(item);
 			return true;
 		}
-		logError("remove item", "the item does not exist");
+		Logger.logError(this.getName(), "remove item", "the item does not exist");
 		return false;
 	}
 
@@ -93,7 +95,7 @@ public class Category {
 			items.put(item, items.get(item) + amount);
 			return true;
 		}
-		logError("increase count", "the item does not exist");
+		Logger.logError(this.getName(), "increase count", "the item does not exist");
 		return false;
 	}
 
@@ -120,10 +122,10 @@ public class Category {
 				this.items.put(item, stock - amount);
 				return true;
 			}
-			logError("decrease count", "not enough items in stock");
+			Logger.logError(this.getName(), "decrease count", "not enough items in stock");
 			return false;
 		}
-		logError("decrease count", "the item does not exist");
+		Logger.logError(this.getName(), "decrease count", "the item does not exist");
 		return false;
 	}
 
@@ -148,13 +150,13 @@ public class Category {
 	public boolean setCount(Item item, int count) {
 		if (itemExists(item)) {
 			if (count < 0) {
-				logError("set count", "count cannot be negative");
+				Logger.logError(this.getName(), "set count", "count cannot be negative");
 				return false;
 			}
 			items.put(item, count);
 			return true;
 		}
-		logError("set count", "the item does not exist");
+		Logger.logError(this.getName(), "set count", "the item does not exist");
 		return false;
 	}
 
@@ -171,15 +173,6 @@ public class Category {
 	 */
 	public void setItems(HashMap<Item, Integer> items) {
 		this.items = items;
-	}
-
-	/**
-	 * Log an error in a pre-determined format.
-	 * @param action the action that was attempted
-	 * @param reason the reason the action failed
-	 */
-	private void logError(String action, String reason) {
-		System.out.println(String.format("[ERROR] %s tried to %s and failed, %s.", this.getName(), action, reason));
 	}
 
 	/**
